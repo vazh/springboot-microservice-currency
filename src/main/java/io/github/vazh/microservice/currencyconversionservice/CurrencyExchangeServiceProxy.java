@@ -9,7 +9,7 @@ public interface CurrencyExchangeServiceProxy {
 
     @GetMapping("/currency-exchange/from/{from}/to/{to}")
     public CurrencyConversionBean retrieveExchangeValue(
-            @PathVariable String from,
-            @PathVariable String to
+            @PathVariable("from") String from,
+            @PathVariable("to") String to
     );
 }
