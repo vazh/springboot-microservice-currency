@@ -18,20 +18,16 @@ import java.util.Map;
 public class CurrencyConversionController {
     private static Logger log = LoggerFactory.getLogger(CurrencyConversionController.class);
 
+    @Autowired
+    private CurrencyExchangeServiceProxy proxy;
+
     @GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVariable String to,
                                                   @PathVariable BigDecimal quantity) {
-        Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("from", from);
-        uriVariables.put("to", to);
 
-        ResponseEntity<CurrencyConversionBean> responseEntity = new RestTemplate().getForEntity(
-                "http://localhost:8000/currency-exchange/from/{from}/to/{to}",
-                CurrencyConversionBean.class,
-                uriVariables
-        );
+        CurrencyConversionBean response = proxy.retrieveExchangeValue(from, to);
 
-        CurrencyConversionBean response = responseEntity.getBody();
+        log.info("{}", response);
 
         return new CurrencyConversionBean(
                 response.getId(),
